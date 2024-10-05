@@ -1,9 +1,11 @@
  # State Machine Diagram
 
- ![sm_nav2_test_4](docs/SmNav2Test4_2024-9-7_222225.svg)
+ ![sm_panda_single_1](docs/SmPandaSingle1_2024-10-5_14399.svg)
 
  ## Description 
- A state machine application for the NOVA Carter using Nav2 and the SMACC nav2z Client Behavior Library.
+ A state machine application for the Franka Emika Panda using IsaacROSDev Containers, MoveIt, CuMotion, ros2_control and the NITROS Vision Pipeline. 
+ 
+ ...and the SMACC moveitz Client Behavior Library.
 
 
 # Workflow
