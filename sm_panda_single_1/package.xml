@@ -33,6 +33,7 @@
 
 
   <exec_depend>joint_trajectory_controller</exec_depend>
+  <exec_depend>isaac_ros_cumotion_moveit</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

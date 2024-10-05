@@ -21,6 +21,7 @@ find_package(moveit2z_client REQUIRED)
 find_package(keyboard_client REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(ros_publisher_client REQUIRED)
+find_package(isaac_ros_cumotion_moveit REQUIRED)
 
 
 set(THIS_PACKAGE_INCLUDE_DEPENDS
@@ -32,6 +33,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   keyboard_client
   ros_publisher_client
   rclcpp
+  isaac_ros_cumotion_moveit
 )
 
 include_directories(
