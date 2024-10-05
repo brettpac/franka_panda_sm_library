@@ -325,6 +325,7 @@ git clone https://github.com/robosoft-ai/nova_carter_sm_library
 I like to work from Nav2 releases. Download and unzip, then drop into the src folder of your local workspace. This is currently 1.1.16
  https://github.com/ros-navigation/navigation2/releases/tag/1.1.16  
 
+
 ### Workspace Operations
 
 Create a file called .isaac_ros_common-config with the following context:
@@ -367,6 +368,12 @@ Launch the application...
  ```
 ros2 launch sm_panda_single_1 sm_panda_single_1.launch.py
  ```
+
+ To launch the isaac_ros_cumotion launch file
+ ```
+ ros2 launch sm_panda_single_1 franka_isaac_sim.launch.py
+ ```
+
 
 # Launch the Viewer
 You should already have the RTA up an running from another terminal. If you don't... 
