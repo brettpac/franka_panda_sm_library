@@ -15,23 +15,12 @@
 [https://nvidia-isaac-ros.github.io/robots/nova_carter/getting_started.html#nova-carter-dev-setup](https://nvidia-isaac-ros.github.io/robots/nova_carter/getting_started.html#nova-carter-dev-setup)  
 
 ## Simulation Environment
-For simulation, we'll be using IsaacSim 4.1.
+For simulation, we'll be using IsaacSim 4.2.
+For right now, the launch files exist in rviz.
+
 Under the IsaacAssets tab go to SAMPLES/NVBLOX/nvblox_sample_scene.
 
-Once inside, you'll need to fing the NOVA_Carter_ROS_nvblox_setup Folder.
-For caster_wheel_left and caster_wheel_right, set the Max Angular Velocity to 500.
-Then set the Mass to 10.0 for each one.
-
-Then find the wheel_left, wheel_right and change the Max Angular Velocity to 500.
-
-Then, find the chassis_link Mass and change it to 30.0
-Find wheel_material and set Dynamic Friction to 2.0, and Static Friction to 2.0.
-
-Deactivate the Dynamics Xform.
-
-Go to PROPS/NVIDIA and frag the charger into the scene.
-Set the position to... z= 0.00917, y= 0.59935, x=5.27575
-Be sure to disable gravity and lock position or it will fall through the floor.
+Once inside, 
 
 ## Let's Get Started
 We begin by cloning isaac_ros_common and nova_carter repos to the src folder of our local workspace. My local workspace is ~/workspace/humble_ws
@@ -311,6 +300,13 @@ These should already be installed but if you just want to make sure..
  ```
  sudo apt-get install -y ros-humble-isaac-ros-image-proc
  sudo apt-get install -y ros-humble-isaac-ros-stereo-image-proc
+
+ ```
+
+ #### Install isaac_ros_cumotion pkgs
+ ```
+ sudo apt-get install -y ros-humble-isaac-ros-cumotion-examples
+ 
  ```
 
 ## Assemble the Workspace
@@ -318,7 +314,8 @@ These should already be installed but if you just want to make sure..
 ### Clone the Application Reposinto the src folder...  
  ```
 git clone https://github.com/robosoft-ai/SMACC2.git  
-git clone https://github.com/robosoft-ai/nova_carter_sm_library
+git clone https://github.com/robosoft-ai/franka_panda_sm_library
+git clone -b humble https://github.com/ros-controls/ros2_controllers.git
  ```
 
 ### Get a Nav2 release into the workspace src folder...
@@ -369,12 +366,16 @@ Launch the application...
 ros2 launch sm_panda_single_1 sm_panda_single_1.launch.py
  ```
 
+## Integrating the cumotion launch files
  To launch the isaac_ros_cumotion launch file
  ```
  ros2 launch sm_panda_single_1 franka_isaac_sim.launch.py
  ```
-
-
+In a separate terminal, run the cuMotion planner node...
+```
+ros2 run isaac_ros_cumotion cumotion_planner_node --ros-args -p robot:=franka.xrdf -p urdf_path:=/opt/ros/humble/share/moveit_resources_panda_description/urdf/panda.urdf
+ ```
+ 
 # Launch the Viewer
 You should already have the RTA up an running from another terminal. If you don't... 
 
