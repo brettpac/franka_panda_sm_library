@@ -1,0 +1,42 @@
+/**:
+  ros__parameters:
+
+    moveit_controller_manager: "moveit_simple_controller_manager/MoveItSimpleControllerManager"
+
+    moveit_simple_controller_manager:
+
+      controller_names:
+        - scaled_joint_trajectory_controller
+        - joint_trajectory_controller
+
+
+      scaled_joint_trajectory_controller:
+        action_ns: follow_joint_trajectory
+        type: FollowJointTrajectory
+        default: false
+        joints:
+          - panda_link0
+          - panda_link1
+          - panda_link2
+          - panda_link3
+          - panda_link4
+          - panda_link5
+          - panda_link6
+          - panda_link7
+                
+
+
+
+      joint_trajectory_controller:
+        action_ns: follow_joint_trajectory
+        type: FollowJointTrajectory
+        default: true
+        joints:
+          - panda_link0
+          - panda_link1
+          - panda_link2
+          - panda_link3
+          - panda_link4
+          - panda_link5
+          - panda_link6
+          - panda_link7
