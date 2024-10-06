@@ -50,7 +50,7 @@ def generate_launch_description():
     )
 
     # Start the actual move_group node/action server
-    run_move_group_node = Node(
+    move_group_node = Node(
         package="moveit_ros_move_group",
         executable="move_group",
         output="screen",
@@ -128,7 +128,7 @@ def generate_launch_description():
         ],
     )
 
-    arm_controller_spawner = Node(
+    panda_arm_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["panda_arm_controller", "-c", "/controller_manager"],
@@ -150,7 +150,7 @@ def generate_launch_description():
         arguments=["--ros-args", "--log-level", "INFO"],
     )
 
-    hand_controller_spawner = Node(
+    panda_hand_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["panda_hand_controller", "-c", "/controller_manager"],
@@ -161,11 +161,11 @@ def generate_launch_description():
         rviz_node,
         static_tf,
         robot_state_publisher,
-        run_move_group_node,
+        move_group_node,
         ros2_control_node,
         joint_state_broadcaster_spawner,
-        arm_controller_spawner,
-        hand_controller_spawner,
+        panda_arm_controller_spawner,
+        panda_hand_controller_spawner,
         keyboard_client_node,
     ]
 )
