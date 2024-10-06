@@ -37,17 +37,46 @@ def generate_launch_description():
 
  #    return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])
 
+    ros2_control_hardware_type = DeclareLaunchArgument(
+        'ros2_control_hardware_type',
+        default_value='isaac',
+        description=(
+            'ROS2 control hardware interface type to use for the launch file -- '
+            'possible values: [mock_components, isaac]'
+        )
+    )
+
 
     moveit_config = (
         MoveItConfigsBuilder("moveit_resources_panda")
-        .robot_description(file_path="config/panda.urdf.xacro")
+        .robot_description(
+            file_path='config/panda.urdf.xacro',
+            mappings={
+                'ros2_control_hardware_type': LaunchConfiguration(
+                    'ros2_control_hardware_type'
+                )
+            },
+        )
         .trajectory_execution(file_path="config/gripper_moveit_controllers.yaml")
+        # This block is where the action is
         .planning_scene_monitor(
             publish_robot_description=True, publish_robot_description_semantic=True
         )
+        #end of where the action is. 
         .planning_pipelines(pipelines=["ompl", "chomp", "pilz_industrial_motion_planner"])
         .to_moveit_configs()
     )
+
+        # Add cuMotion to list of planning pipelines.
+    cumotion_config_file_path = os.path.join(
+        get_package_share_directory('isaac_ros_cumotion_moveit'),
+        'config',
+        'isaac_ros_cumotion_planning.yaml'
+    )
+    with open(cumotion_config_file_path) as cumotion_config_file:
+        cumotion_config = yaml.safe_load(cumotion_config_file)
+    moveit_config.planning_pipelines['planning_pipelines'].append('isaac_ros_cumotion')
+    moveit_config.planning_pipelines['isaac_ros_cumotion'] = cumotion_config
 
     # Start the actual move_group node/action server
     move_group_node = Node(
@@ -67,7 +96,8 @@ def generate_launch_description():
     rviz_config_file = os.path.join(
         get_package_share_directory('sm_panda_single_1'),
         'rviz',
-        'panda_moveit_config_demo.rviz',
+   #     'panda_moveit_config_demo.rviz',
+        'franka_moveit_config.rviz',
     )
 
     rviz_node = Node(
@@ -86,13 +116,37 @@ def generate_launch_description():
     )
 
     # Static TF
-    static_tf = Node(
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        name="static_transform_publisher",
-        output="log",
-        arguments=["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "world", "panda_link0"],
+    world2robot_tf_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_transform_publisher',
+        output='log',
+        arguments=['--frame-id', 'world', '--child-frame-id', 'panda_link0'],
     )
+    hand2camera_tf_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_transform_publisher',
+        output='log',
+        arguments=[
+            '0.04',
+            '0.0',
+            '0.04',
+            '0.0',
+            '0.0',
+            '0.0',
+            'panda_hand',
+            'sim_camera',
+        ],
+    )
+    # Static TF
+    #static_tf = Node(
+    #    package="tf2_ros",
+    #    executable="static_transform_publisher",
+    #    name="static_transform_publisher",
+    #    output="log",
+    #    arguments=["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "world", "panda_link0"],
+    #)
 
     # Publish TF
     robot_state_publisher = Node(
@@ -101,6 +155,7 @@ def generate_launch_description():
         name="robot_state_publisher",
         output="both",
         parameters=[moveit_config.robot_description],
+        prefix="xterm -hold -e",
     )
 
     # ros2_control using FakeSystem as hardware
@@ -109,11 +164,22 @@ def generate_launch_description():
         "config",
         "ros2_controllers.yaml",
     )
+   # ros2_control_node = Node(
+   #     package="controller_manager",
+   #     executable="ros2_control_node",
+   #     parameters=[moveit_config.robot_description, ros2_controllers_path],
+   #     output="both",
+   # )
+
     ros2_control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
+        package='controller_manager',
+        executable='ros2_control_node',
         parameters=[moveit_config.robot_description, ros2_controllers_path],
-        output="both",
+        remappings=[
+            ('/controller_manager/robot_description', '/robot_description'),
+        ],
+        prefix="xterm -hold -e",
+        output='screen',
     )
 
     joint_state_broadcaster_spawner = Node(
@@ -126,12 +192,14 @@ def generate_launch_description():
             "--controller-manager",
             "/controller_manager",
         ],
+        prefix="xterm -hold -e",
     )
 
     panda_arm_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["panda_arm_controller", "-c", "/controller_manager"],
+        prefix="xterm -hold -e",
     )
 
     smacc_state_machine_spawner = Node(
@@ -154,12 +222,16 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner",
         arguments=["panda_hand_controller", "-c", "/controller_manager"],
+        prefix="xterm -hold -e",
     )
 
     return LaunchDescription([
+        ros2_control_hardware_type,
         smacc_state_machine_spawner,
         rviz_node,
-        static_tf,
+        #static_tf,
+        world2robot_tf_node,
+        hand2camera_tf_node,
         robot_state_publisher,
         move_group_node,
         ros2_control_node,
