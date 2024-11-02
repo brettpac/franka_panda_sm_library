@@ -57,6 +57,7 @@ def generate_launch_description():
                 )
             },
         )
+        .robot_description_semantic(file_path='config/panda.srdf')
         .trajectory_execution(file_path="config/gripper_moveit_controllers.yaml")
         # This block is where the action is
         .planning_scene_monitor(
@@ -121,24 +122,27 @@ def generate_launch_description():
         executable='static_transform_publisher',
         name='static_transform_publisher',
         output='log',
-        arguments=['--frame-id', 'world', '--child-frame-id', 'panda_link0'],
+   #     arguments=['--frame-id', 'world', '--child-frame-id', 'panda_link0'],
+        arguments=["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "world", "panda_link0"],
     )
-    hand2camera_tf_node = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='static_transform_publisher',
-        output='log',
-        arguments=[
-            '0.04',
-            '0.0',
-            '0.04',
-            '0.0',
-            '0.0',
-            '0.0',
-            'panda_hand',
-            'sim_camera',
-        ],
-    )
+   # hand2camera_tf_node = Node(
+   #     package='tf2_ros',
+   #     executable='static_transform_publisher',
+   #     name='static_transform_publisher',
+   #     output='log',
+   #     arguments=[
+   #         '0.04',
+   #         '0.0',
+   #         '0.04',
+   #         '0.0',
+   #         '0.0',
+   #         '0.0',
+   #         'panda_hand',
+   #         'sim_camera',
+   #     ],
+   # )
+    
+    
     # Static TF
     #static_tf = Node(
     #    package="tf2_ros",
@@ -231,7 +235,7 @@ def generate_launch_description():
         rviz_node,
         #static_tf,
         world2robot_tf_node,
-        hand2camera_tf_node,
+        #hand2camera_tf_node,
         robot_state_publisher,
         move_group_node,
         ros2_control_node,
