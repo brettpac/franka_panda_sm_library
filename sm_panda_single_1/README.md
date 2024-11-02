@@ -319,6 +319,7 @@ To test this section use this [IsaacSim Tutorial](https://nvidia-isaac-ros.githu
 git clone https://github.com/robosoft-ai/SMACC2.git  
 git clone https://github.com/robosoft-ai/franka_panda_sm_library
 git clone -b humble https://github.com/ros-controls/ros2_controllers.git
+git clone -b ros2 https://github.com/moveit/moveit_resources.git
  ```
 
 ### Get a Nav2 release into the workspace src folder...

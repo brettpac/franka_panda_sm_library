@@ -49,9 +49,9 @@ struct StAcquireSensors : smacc2::SmaccState<StAcquireSensors, SmPandaSingle1>
   // TRANSITION TABLE
   typedef boost::mpl::list<
 
-    Transition<EvCbSuccess<CbWaitTopicMessage<sensor_msgs::msg::JointState>, OrArm>, StMoveKnownState1, SUCCESS>,
+    Transition<EvCbSuccess<CbWaitTopicMessage<sensor_msgs::msg::JointState>, OrArm>, StMoveJoints1, SUCCESS>,
     
-    Transition<EvKeyPressN<CbDefaultKeyboardBehavior, OrKeyboard>, StMoveKnownState1, NEXT>  
+    Transition<EvKeyPressN<CbDefaultKeyboardBehavior, OrKeyboard>, StMoveJoints1, NEXT>  
 
   
 
