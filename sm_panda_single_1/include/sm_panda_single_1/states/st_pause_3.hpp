@@ -48,9 +48,9 @@ struct StPause3 : smacc2::SmaccState<StPause3, SmPandaSingle1>
 
   // TRANSITION TABLE
   typedef boost::mpl::list<
-    Transition<EvCbSuccess<CbSleepFor, OrArm>, StMoveJoints2, SUCCESS>,
+    Transition<EvCbSuccess<CbSleepFor, OrArm>, StMoveJoints3, SUCCESS>,
     
-    Transition<EvKeyPressN<CbDefaultKeyboardBehavior, OrKeyboard>, StMoveJoints2, NEXT>  
+    Transition<EvKeyPressN<CbDefaultKeyboardBehavior, OrKeyboard>, StMoveJoints3, NEXT>  
   
 
     > reactions;

@@ -21,19 +21,24 @@
 
 #pragma once
 
-#include "rclcpp/rclcpp.hpp"
-#include "smacc2/smacc.hpp"
+#include <sensor_msgs/msg/joint_state.h>
+#include <smacc2/client_behaviors/cb_sleep_for.hpp>
 
 namespace sm_panda_single_1
 {
 // SMACC2 classes
+using smacc2::EvStateRequestFinish;
 using smacc2::Transition;
 using smacc2::default_transition_tags::SUCCESS;
 using namespace smacc2;
+using namespace cl_moveit2z;
+using smacc2::client_behaviors::CbWaitTopicMessage;
+using smacc2::client_behaviors::CbSleepFor;
+using namespace std::chrono_literals;
 using namespace cl_keyboard;
 
 // STATE DECLARATION
-struct StMoveKnownState1 : smacc2::SmaccState<StMoveKnownState1, SmPandaSingle1>
+struct StPause8 : smacc2::SmaccState<StPause8, SmPandaSingle1>
 {
   using SmaccState::SmaccState;
 
@@ -43,28 +48,21 @@ struct StMoveKnownState1 : smacc2::SmaccState<StMoveKnownState1, SmPandaSingle1>
 
   // TRANSITION TABLE
   typedef boost::mpl::list<
+    Transition<EvCbSuccess<CbSleepFor, OrArm>, StMoveLastTrajectoryInitialState, SUCCESS>,
+    
+    Transition<EvKeyPressN<CbDefaultKeyboardBehavior, OrKeyboard>, StMoveLastTrajectoryInitialState, NEXT>  
+  
 
-      Transition<EvCbSuccess<CbMoveKnownState, OrArm>, StPause5, SUCCESS>,
- 
-      Transition<EvKeyPressN<CbDefaultKeyboardBehavior, OrKeyboard>, StPause5, NEXT>  
-
-    >
-    reactions;
+    > reactions;
 
   // STATE FUNCTIONS
   static void staticConfigure()
   {
-    std::string pkg = "sm_panda_single_1";
-    std::string filepath = "config/move_group_client/known_states/control_authority_posture2.yaml";
-
-    configure_orthogonal<OrArm, CbMoveKnownState>(pkg, filepath);
+    // configure_orthogonal<OrArm, CbWaitTopicMessage<sensor_msgs::msg::JointState>>("/joint_states");
+    configure_orthogonal<OrArm, CbSleepFor>(15s);
     configure_orthogonal<OrKeyboard, CbDefaultKeyboardBehavior>();
-  }
+  };
 
-  void runtimeConfigure() { RCLCPP_INFO(getLogger(), "Entering StMoveKnownState"); }
-
-  void onEntry() { RCLCPP_INFO(getLogger(), "On Entry!"); }
-
-  void onExit() { RCLCPP_INFO(getLogger(), "On Exit!"); }
+  void runtimeConfigure() {}
 };
 }  // namespace sm_panda_single_1

@@ -43,11 +43,9 @@ struct StMoveKnownState3 : smacc2::SmaccState<StMoveKnownState3, SmPandaSingle1>
 
   // TRANSITION TABLE
   typedef boost::mpl::list<
-      Transition<EvCbSuccess<CbMoveKnownState, OrArm>, StPouringMotion, SUCCESS>,
-      Transition<EvCbFailure<CbMoveKnownState, OrArm>, StPouringMotion, ABORT>,
-
-      Transition<EvKeyPressP<CbDefaultKeyboardBehavior, OrKeyboard>, StExecuteLastTrajectory, PREVIOUS>,  
-      Transition<EvKeyPressN<CbDefaultKeyboardBehavior, OrKeyboard>, StPouringMotion, NEXT>  
+      Transition<EvCbSuccess<CbMoveKnownState, OrArm>, StPause7, SUCCESS>,
+      Transition<EvCbFailure<CbMoveKnownState, OrArm>, StMoveKnownState3, ABORT>,
+      Transition<EvKeyPressN<CbDefaultKeyboardBehavior, OrKeyboard>, StPause7, NEXT>  
     >
     reactions;
 
@@ -55,7 +53,7 @@ struct StMoveKnownState3 : smacc2::SmaccState<StMoveKnownState3, SmPandaSingle1>
   static void staticConfigure()
   {
     std::string pkg = "sm_panda_single_1";
-    std::string filepath = "config/move_group_client/known_states/control_authority_posture.yaml";
+    std::string filepath = "config/move_group_client/known_states/control_authority_posture4.yaml";
 
     configure_orthogonal<OrArm, CbMoveKnownState>(pkg, filepath);
     configure_orthogonal<OrKeyboard, CbDefaultKeyboardBehavior>();

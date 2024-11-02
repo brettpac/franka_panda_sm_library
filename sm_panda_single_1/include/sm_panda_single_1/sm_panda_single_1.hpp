@@ -53,6 +53,15 @@ struct StPause3;
 struct StPause4;
 struct StPause5;
 struct StPause6;
+struct StPause7;
+struct StPause8;
+struct StPause9;
+struct StPause10;
+struct StPause11;
+struct StPause12;
+struct StPause13;
+struct StPause14;
+struct StPause15;
 struct StMoveJoints1;
 struct StMoveJoints2;
 struct StMoveJoints3;
@@ -69,6 +78,7 @@ struct StMoveKnownState2;
 struct StMoveKnownState3;
 struct StPouringMotion;
 struct StUndoLastTrajectory;
+struct StMoveLastTrajectoryInitialState;
 
 //--------------------------------------------------------------------
 //STATE_MACHINE
@@ -94,6 +104,15 @@ struct SmPandaSingle1 : public smacc2::SmaccStateMachineBase<SmPandaSingle1, StP
 #include "states/st_pause_4.hpp"
 #include "states/st_pause_5.hpp"
 #include "states/st_pause_6.hpp"
+#include "states/st_pause_7.hpp"
+#include "states/st_pause_8.hpp"
+#include "states/st_pause_9.hpp"
+#include "states/st_pause_10.hpp"
+#include "states/st_pause_11.hpp"
+#include "states/st_pause_12.hpp"
+#include "states/st_pause_13.hpp"
+#include "states/st_pause_14.hpp"
+#include "states/st_pause_15.hpp"
 #include "states/st_attach_object.hpp"
 #include "states/st_move_end_effector.hpp"
 #include "states/st_circular_pivot_motion.hpp"

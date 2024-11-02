@@ -43,13 +43,10 @@ struct StPouringMotion : smacc2::SmaccState<StPouringMotion, SmPandaSingle1>
 
   // TRANSITION TABLE
   typedef boost::mpl::list<
-      Transition<EvCbSuccess<CbCircularPouringMotion, OrArm>, StMoveLastTrajectoryInitialState, SUCCESS>,
-      Transition<EvCbFailure<CbCircularPouringMotion, OrArm>, StMoveLastTrajectoryInitialState, ABORT>,
+      Transition<EvCbSuccess<CbCircularPouringMotion, OrArm>, StPause8, SUCCESS>,
+      // Transition<EvCbFailure<CbCircularPouringMotion, OrArm>, StPouringMotion, ABORT>,
 
-
-      Transition<EvKeyPressP<CbDefaultKeyboardBehavior, OrKeyboard>, StMoveKnownState1, PREVIOUS>,  
-
-      Transition<EvKeyPressN<CbDefaultKeyboardBehavior, OrKeyboard>, StMoveLastTrajectoryInitialState, NEXT>  
+      Transition<EvKeyPressN<CbDefaultKeyboardBehavior, OrKeyboard>, StPause8, NEXT>  
     >
     reactions;
 
